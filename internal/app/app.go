@@ -6,6 +6,7 @@ import (
 	"github.com/Stanislau-Senkevich/GRPC_Family/internal/config"
 	jwtmanager "github.com/Stanislau-Senkevich/GRPC_Family/internal/lib/jwt"
 	"github.com/Stanislau-Senkevich/GRPC_Family/internal/repository/mongodb"
+	"github.com/Stanislau-Senkevich/GRPC_Family/internal/services/family"
 	"log/slog"
 )
 
@@ -18,17 +19,21 @@ func New(
 	log *slog.Logger,
 	cfg *config.Config,
 ) *App {
-	_, err := mongodb.InitMongoRepository(&cfg.Mongo, log)
+	repo, err := mongodb.InitMongoRepository(&cfg.Mongo, log)
 	if err != nil {
 		panic(fmt.Errorf("failed to initialize repository: %w", err))
 	}
 
 	jwtManager := jwtmanager.New(cfg.SigningKey)
 
-	accessibleRoles := map[string][]string{}
+	familyService := family.New(log, repo, jwtManager)
+
+	accessibleRoles := map[string][]string{
+		"/family.Family/CreateFamily": {"user", "admin"},
+	}
 
 	grpcApp := grpcapp.New(
-		log, &cfg.GRPC,
+		log, &cfg.GRPC, familyService,
 		accessibleRoles, jwtManager,
 	)
 

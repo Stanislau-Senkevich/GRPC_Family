@@ -3,10 +3,11 @@ package jwt
 import (
 	"context"
 	"fmt"
+	"strings"
+
 	grpcerror "github.com/Stanislau-Senkevich/GRPC_Family/internal/error"
 	"github.com/golang-jwt/jwt"
 	"google.golang.org/grpc/metadata"
-	"strings"
 )
 
 type Manager struct {
@@ -64,4 +65,18 @@ func (m *Manager) GetClaims(ctx context.Context) (jwt.MapClaims, error) {
 	}
 
 	return claims, nil
+}
+
+func (m *Manager) GetUserIDFromContext(ctx context.Context) (int64, error) {
+	claims, err := m.GetClaims(ctx)
+	if err != nil {
+		return -1, err
+	}
+
+	id, ok := claims["user_id"]
+	if !ok {
+		return -1, fmt.Errorf("user_id is not in claims")
+	}
+
+	return int64(id.(float64)), nil
 }

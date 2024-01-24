@@ -3,7 +3,9 @@ package grpcapp
 import (
 	"fmt"
 	"github.com/Stanislau-Senkevich/GRPC_Family/internal/config"
+	"github.com/Stanislau-Senkevich/GRPC_Family/internal/grpc/family"
 	jwtmanager "github.com/Stanislau-Senkevich/GRPC_Family/internal/lib/jwt"
+	"github.com/Stanislau-Senkevich/GRPC_Family/internal/services"
 	"google.golang.org/grpc"
 	"log/slog"
 	"net"
@@ -20,6 +22,7 @@ func New(
 	log *slog.Logger,
 	gRPCConfig *config.GRPCConfig,
 
+	familyService services.Family,
 	accessibleRoles map[string][]string,
 	jwtManager *jwtmanager.Manager,
 ) *App {
@@ -30,6 +33,8 @@ func New(
 		grpc.StreamInterceptor(interceptor.Stream()),
 		grpc.ConnectionTimeout(gRPCConfig.Timeout),
 	)
+
+	family.Register(gRPCServer, log, familyService)
 
 	return &App{log, gRPCServer, gRPCConfig}
 }
