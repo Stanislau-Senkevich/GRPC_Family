@@ -8,7 +8,6 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
-	"log"
 	"strings"
 )
 
@@ -72,7 +71,6 @@ func (i *JWTInterceptor) Unary() grpc.UnaryServerInterceptor {
 		info *grpc.UnaryServerInfo,
 		handler grpc.UnaryHandler,
 	) (interface{}, error) {
-		log.Println(info.FullMethod)
 		err := i.authorize(ctx, info.FullMethod)
 		if err != nil {
 			return nil, err
@@ -91,7 +89,6 @@ func (i *JWTInterceptor) Stream() grpc.StreamServerInterceptor {
 		info *grpc.StreamServerInfo,
 		handler grpc.StreamHandler,
 	) error {
-		log.Println(info.FullMethod)
 		err := i.authorize(stream.Context(), info.FullMethod)
 		if err != nil {
 			return err
