@@ -8,7 +8,7 @@ This API based on gRPC technology provides interface for creating and administra
 with integration with my another GRPC microservice (https://github.com/Stanislau-Senkevich/GRPC_SSO).
 
 To test this API on your own you should download protocols from https://github.com/Stanislau-Senkevich/protocols
-and send grpc requests on <span style="color: blue"> droplet.senkevichdev.work:33033 </span> 
+and send grpc requests on <span style="color: blue"> grpc://droplet.senkevichdev.work:33033 </span> 
 
 ### Models
 - Admin
