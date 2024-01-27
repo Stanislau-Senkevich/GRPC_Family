@@ -32,7 +32,7 @@ func New(
 	}
 	log.Info("repository initialized")
 
-	jwtManager := jwtmanager.New(cfg.SigningKey)
+	jwtManager := jwtmanager.New([]byte(cfg.SigningKey))
 	log.Info("jwt-manager initialized")
 
 	ssoClient, err := grpcclient.New(

@@ -20,7 +20,7 @@ type Config struct {
 	Mongo         MongoConfig    `yaml:"mongo_config"`
 	GRPC          GRPCConfig     `yaml:"grpc"`
 	ClientsConfig *ClientsConfig `yaml:"clients_config"`
-	SigningKey    []byte
+	SigningKey    string
 }
 
 type MongoConfig struct {
@@ -92,6 +92,7 @@ func parseEnv(cfg *Config) error {
 
 	cfg.Mongo.User = viper.GetString("mongo_user")
 	cfg.Mongo.Password = viper.GetString("mongo_password")
+	cfg.SigningKey = viper.GetString("signing_key")
 	cfg.ClientsConfig.AdminEmail = viper.GetString("admin_email")
 	cfg.ClientsConfig.AdminPassword = viper.GetString("admin_password")
 
