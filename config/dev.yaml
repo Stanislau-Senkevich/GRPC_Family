@@ -1,5 +1,4 @@
 env: "dev"
-token_ttl: 1h
 
 mongo_config:
   db_name: "GRPCMicroservicesCluster"
@@ -8,6 +7,12 @@ mongo_config:
     family: "family"
     invite: "invite"
     sequence: "sequence"
+
+clients_config:
+  sso:
+    address: "droplet.senkevichdev.work:44044"
+    timeout: 5s
+    retries_count: 5
 
 grpc:
   port: 33033

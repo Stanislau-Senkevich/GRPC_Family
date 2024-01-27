@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/ilyakaznacheev/cleanenv"
 	"github.com/spf13/viper"
-	"github.com/subosito/gotenv"
 	"os"
 	"time"
 )
@@ -17,10 +16,11 @@ const (
 )
 
 type Config struct {
-	Env        string      `yaml:"env" env-default:"local"`
-	Mongo      MongoConfig `yaml:"mongo_config"`
-	GRPC       GRPCConfig  `yaml:"grpc"`
-	SigningKey []byte
+	Env           string         `yaml:"env" env-default:"local"`
+	Mongo         MongoConfig    `yaml:"mongo_config"`
+	GRPC          GRPCConfig     `yaml:"grpc"`
+	ClientsConfig *ClientsConfig `yaml:"clients_config"`
+	SigningKey    []byte
 }
 
 type MongoConfig struct {
@@ -34,6 +34,18 @@ type MongoConfig struct {
 type GRPCConfig struct {
 	Port    int           `yaml:"port"`
 	Timeout time.Duration `yaml:"timeout"`
+}
+
+type Client struct {
+	Address      string        `yaml:"address"`
+	Timeout      time.Duration `yaml:"timeout"`
+	RetriesCount int           `yaml:"retries_count"`
+}
+
+type ClientsConfig struct {
+	AdminEmail    string
+	AdminPassword string
+	SSO           Client `yaml:"sso"`
 }
 
 // MustLoad reads and loads the configuration from a file specified by the fetched config path.
@@ -80,14 +92,16 @@ func parseEnv(cfg *Config) error {
 
 	cfg.Mongo.User = viper.GetString("mongo_user")
 	cfg.Mongo.Password = viper.GetString("mongo_password")
+	cfg.ClientsConfig.AdminEmail = viper.GetString("admin_email")
+	cfg.ClientsConfig.AdminPassword = viper.GetString("admin_password")
 
 	return nil
 }
 
 func BindEnv() error {
-	if err := gotenv.Load(); err != nil {
-		return fmt.Errorf("failed to parse .env file: %w", err)
-	}
+	//if err := gotenv.Load(); err != nil {
+	//	return fmt.Errorf("failed to parse .env file: %w", err)
+	//}
 
 	if err := viper.BindEnv("mongo_user"); err != nil {
 		return fmt.Errorf("failed to set up mongo_user: %w", err)
@@ -103,6 +117,14 @@ func BindEnv() error {
 
 	if err := viper.BindEnv("signing_key"); err != nil {
 		return fmt.Errorf("failed to set up signing_key: %w", err)
+	}
+
+	if err := viper.BindEnv("admin_email"); err != nil {
+		return fmt.Errorf("failed to set up admin_email: %w", err)
+	}
+
+	if err := viper.BindEnv("admin_password"); err != nil {
+		return fmt.Errorf("failed to set up admin_password: %w", err)
 	}
 
 	return nil

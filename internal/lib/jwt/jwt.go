@@ -2,6 +2,7 @@ package jwt
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 
@@ -41,7 +42,31 @@ func (m *Manager) ParseToken(accessToken string) (jwt.MapClaims, error) {
 		return nil, grpcerror.ErrNoToken
 	}
 
+	if err = verify(claims); err != nil {
+		return nil, err
+	}
+
 	return claims, nil
+}
+
+func verify(claims jwt.MapClaims) error {
+	if _, ok := claims["user_id"]; !ok {
+		return fmt.Errorf("user_id was not found") //nolint
+	}
+
+	if _, ok := claims["role"]; !ok {
+		return errors.New("role was not found") //nolint
+	}
+
+	if _, ok := claims["email"]; !ok {
+		return errors.New("email was not found") //nolint
+	}
+
+	if _, ok := claims["user_id"].(float64); !ok {
+		return errors.New("invalid user_id") //nolint
+	}
+
+	return nil
 }
 
 // GetClaims extracts and returns the JWT claims from the authorization token
@@ -67,16 +92,16 @@ func (m *Manager) GetClaims(ctx context.Context) (jwt.MapClaims, error) {
 	return claims, nil
 }
 
-func (m *Manager) GetUserIDFromContext(ctx context.Context) (int64, error) {
-	claims, err := m.GetClaims(ctx)
-	if err != nil {
-		return -1, err
-	}
+func (m *Manager) GetUserIDFromContext(ctx context.Context) int64 {
+	claims, _ := m.GetClaims(ctx)
 
-	id, ok := claims["user_id"]
-	if !ok {
-		return -1, fmt.Errorf("user_id is not in claims")
-	}
+	id, _ := claims["user_id"].(float64)
 
-	return int64(id.(float64)), nil
+	return int64(id)
+}
+
+func (m *Manager) IsAdmin(ctx context.Context) bool {
+	claims, _ := m.GetClaims(ctx)
+
+	return claims["role"] == "admin"
 }

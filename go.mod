@@ -6,11 +6,12 @@ toolchain go1.21.6
 
 require (
 	github.com/BurntSushi/toml v1.2.1 // indirect
-	github.com/Stanislau-Senkevich/protocols v1.1.0 // indirect
+	github.com/Stanislau-Senkevich/protocols v1.1.4 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
+	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/ilyakaznacheev/cleanenv v1.5.0 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect

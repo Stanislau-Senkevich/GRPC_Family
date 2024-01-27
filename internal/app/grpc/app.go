@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/Stanislau-Senkevich/GRPC_Family/internal/config"
 	"github.com/Stanislau-Senkevich/GRPC_Family/internal/grpc/family"
+	"github.com/Stanislau-Senkevich/GRPC_Family/internal/grpc/familyleader"
+	"github.com/Stanislau-Senkevich/GRPC_Family/internal/grpc/invite"
 	jwtmanager "github.com/Stanislau-Senkevich/GRPC_Family/internal/lib/jwt"
 	"github.com/Stanislau-Senkevich/GRPC_Family/internal/services"
 	"google.golang.org/grpc"
@@ -23,6 +25,9 @@ func New(
 	gRPCConfig *config.GRPCConfig,
 
 	familyService services.Family,
+	leaderService services.FamilyLeader,
+	inviteService services.Invite,
+	sso services.SSO,
 	accessibleRoles map[string][]string,
 	jwtManager *jwtmanager.Manager,
 ) *App {
@@ -34,7 +39,9 @@ func New(
 		grpc.ConnectionTimeout(gRPCConfig.Timeout),
 	)
 
-	family.Register(gRPCServer, log, familyService)
+	family.Register(gRPCServer, log, familyService, sso)
+	invite.Register(gRPCServer, log, inviteService, sso)
+	familyleader.Register(gRPCServer, log, leaderService, sso)
 
 	return &App{log, gRPCServer, gRPCConfig}
 }

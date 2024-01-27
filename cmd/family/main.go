@@ -24,7 +24,7 @@ func main() {
 
 	application := app.New(log, cfg)
 
-	go application.GRPCApp.MustRun()
+	go application.GRPCAppServer.MustRun()
 
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, syscall.SIGTERM, syscall.SIGINT)
@@ -32,7 +32,7 @@ func main() {
 
 	log.Info("trying to shut down the application")
 
-	application.GRPCApp.Stop()
+	application.GRPCAppServer.Stop()
 
 	log.Info("grpc server shut down")
 }
