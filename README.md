@@ -33,6 +33,7 @@ and send grpc requests on <span style="color: blue"> grpc://droplet.senkevichdev
 - #### gRPC
 - #### MongoDB
 - #### Docker
+- #### Kubernetes
 - #### JWT-tokens
 - #### DNS
 - #### CI/CD (GitHub Actions)

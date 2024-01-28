@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: family-grpc
+spec:
+  rules:
+    - host: droplet.senkevichdev.work
+      http:
+        paths:
+          - path: /family
+            pathType: Prefix
+            backend:
+              service:
+                name: family-service
+                port:
+                  number: 44044

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: family-deployment
+  labels:
+    app: family-grpc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: family-grpc
+  template:
+    metadata:
+      labels:
+        app: family-grpc
+    spec:
+      containers:
+      - name: family-grpc
+        image: senkevichs/grpc-family:1.0.0
+        ports:
+        - containerPort: 44044
+        resources:
+          requests:
+            cpu: 100m
+            memory: 300Mi
+        env:
+          - name: MONGO_USER
+            value: your_user
+          - name: MONGO_PASSWORD
+            value: your_password
+          - name: HASH_SALT
+            value: your_salt
+          - name: SIGNING_KEY
+            value: you_signing_key
+          - name: CONFIG_PATH
+            value: ./config/dev.yaml
+          - name: ADMIN_EMAIL
+            value: admin_email
+          - name: ADMIN_PASSWORD
+            value: admin_password
