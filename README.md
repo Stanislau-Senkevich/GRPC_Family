@@ -47,3 +47,39 @@ and send grpc requests on <span style="color: blue"> grpc://droplet.senkevichdev
 - #### Logging with slog package
 
 -----------------
+### Tools and libraries
+
+### Protocols and Utilities
+
+- `Stanislau-Senkevich/protocols`: Protocol implementations.
+
+### Authentication
+
+- `golang-jwt/jwt`: JWT functionality.
+
+### Middleware
+
+- `grpc-ecosystem/go-grpc-middleware/v2`: provides gRPC middleware.
+
+### Configuration
+
+- `ilyakaznacheev/cleanenv`: Environment variable reading and validation.
+- `spf13/viper`: Configuration solution for Go applications.
+- `subosito/gotenv`: Loading environment variables from .env files.
+
+### Database
+
+- `go.mongodb.org/mongo-driver`: Go package providing driver and functinality to interact with MongoDB.
+
+### gRPC
+
+- `google.golang.org/grpc`: gRPC Go implementation.
+
+### Logging
+
+- `log/slog`: standard Go library for logging.
+
+### Protocol Buffers
+
+- `google.golang.org/protobuf`: Protocol Buffers serialization.
+
